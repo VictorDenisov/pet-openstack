@@ -4,8 +4,9 @@
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
-MGMT_IP = "10.0.1.10"
-PUBLIC_IP = "10.0.2.10"
+MGMT_IP = "172.15.0.7"
+PUBLIC_IP = "172.30.1.8"
+PRIVATE_IP = "192.168.1.8"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 	config.vm.box = "ubuntu14.04-server-amd64"
@@ -13,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	config.vm.network "private_network", ip: MGMT_IP
 	config.vm.network "private_network", ip: PUBLIC_IP
-	config.vm.network "private_network", ip: "10.0.3.10"
+	config.vm.network "private_network", ip: PRIVATE_IP
 	config.vm.synced_folder ".", "/vagrant", nfs: true
 
 	config.vm.provider :virtualbox do |vb|
@@ -25,7 +26,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 		puppet.module_path = "modules"
 		puppet.facter = {
 			"mgmt_ip" => MGMT_IP,
-			"public_ip" => PUBLIC_IP
+			"public_ip" => PUBLIC_IP,
+			"private_ip" => PRIVATE_IP,
 		}
 	end
 end
