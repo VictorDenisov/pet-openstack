@@ -1,0 +1,43 @@
+{
+  "author": "saz",
+  "checksums": {
+    "templates/timezone.erb": "177a5234f8fdb29d5dbf997d002f2bc9",
+    "Rakefile": "f5c30a740a495fde127ac59b415ece74",
+    ".bundle/config": "7f1c988748783d2a8d455376eed1470c",
+    "Gemfile": "aa49c72b47643880d7bc44fcc3e2cd41",
+    "spec/support/debian.rb": "975b384cfe478daaa37706b4279d9f7d",
+    "templates/clock.erb": "139ad25bcc9637c94cc15c043b76f929",
+    "spec/classes/timezone_spec.rb": "45f493119940e8ab6924f03918591568",
+    "spec/support/gentoo.rb": "130318adfdbfca53f6b5be296f6dcd7e",
+    "spec/support/validate_params.rb": "70fd7489a47fbd0d331b9baed2256e9a",
+    "spec/support/redhat.rb": "b52f606be53d28801275248255ac34eb",
+    "Modulefile": "7e06374fd1aadcfdcb7ddc9d7420d580",
+    ".travis.yml": "40d74c9d8b2cd53b03cfb6561e89c468",
+    "tests/init.pp": "6bafc4062b1bafbdf8e36e81b55ee1c5",
+    "spec/spec_helper.rb": "889ca8d81ea31a688f2f5d906c36dd09",
+    ".fixtures.yml": "3b6c0d26dfa95b8759a2efd9fb068d1a",
+    "LICENSE": "2a944942e1496af1886903d274dedb13",
+    "manifests/params.pp": "bf01c4fad5733cd6b2025135d652e012",
+    ".rspec": "ed6de6956c8eb35eaaef24a7ada51048",
+    "manifests/init.pp": "1a1112fac61b1a81c65e4e31901891b3",
+    "README.md": "5fd6667527ecceaa91c92edbed25202f",
+    "Gemfile.lock": "c96b3114524a2919c1181c1dbaa9a8ce"
+  },
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": "\u003e\u003d 2.3.0"
+    }
+  ],
+  "description": "Manage timezone settings via Puppet",
+  "license": "Apache License, Version 2.0",
+  "name": "saz-timezone",
+  "operatingsystem_support": [],
+  "project_page": "https://github.com/saz/puppet-timezone",
+  "requirements": [],
+  "source": "git://github.com/saz/puppet-timezone",
+  "summary": "UNKNOWN",
+  "tags": [],
+  "types": [],
+  "version": "3.0.1"
+}
