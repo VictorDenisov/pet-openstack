@@ -1,0 +1,41 @@
+mysql_root_user: "root"
+mysql_root_pass: "stack"
+
+rabbitmq_user: "guest"
+rabbitmq_pass: "bunny"
+
+keystone_db_user: "keystoneUser"
+keystone_db_pass: "keystonePass"
+
+openstack_admin_user: "admin"
+openstack_admin_pass: "admin"
+
+glance_db_user: "glanceUser"
+glance_db_pass: "glancePass"
+
+glance_service_user: "glance"
+glance_service_pass: "glance"
+
+neutron_db_user: "neutronUser"
+neutron_db_pass: "neutronPass"
+
+neutron_service_user: "neutron"
+neutron_service_pass: "neutron"
+
+cinder_db_user: "cinderUser"
+cinder_db_pass: "cinderPass"
+
+cinder_service_user: "cinder"
+cinder_service_pass: "cinder"
+
+nova_db_user: "novaUser"
+nova_db_pass: "novaPass"
+
+nova_service_user: "nova"
+nova_service_pass: "nova"
+
+ceilometer_db_user: "ceilUser"
+ceilometer_db_pass: "ceilPass"
+
+ceilometer_service_user: "ceilometer"
+ceilometer_service_pass: "ceilometer"

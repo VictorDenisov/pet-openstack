@@ -29,5 +29,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 			"public_ip" => PUBLIC_IP,
 			"private_ip" => PRIVATE_IP,
 		}
+		puppet.hiera_config_path = "hiera.yaml"
 	end
 end
