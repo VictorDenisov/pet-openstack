@@ -1,7 +1,7 @@
 mysql_root_user: "root"
 mysql_root_pass: "stack"
 
-rabbitmq_user: "guest"
+rabbitmq_user: "rabbit"
 rabbitmq_pass: "bunny"
 
 keystone_db_user: "keystoneUser"
