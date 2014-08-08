@@ -47,7 +47,6 @@ class { 'keystone':
 	mysql_module        => '2.3',
 }
 
-# Adds the admin credential to keystone.
 class { 'keystone::roles::admin':
 	email        => 'admin@example.com',
 	password     => $openstack_admin_pass,
@@ -69,3 +68,4 @@ class { 'keystone::db::mysql':
 	allowed_hosts => '%',
 }
 
+include adminrc
