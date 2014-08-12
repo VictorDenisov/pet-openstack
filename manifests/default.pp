@@ -30,6 +30,9 @@ $messaging_pass = hiera('rabbitmq_pass')
 $neutron_db_user = hiera('neutron_db_user')
 $neutron_db_pass = hiera('neutron_db_pass')
 
+$neutron_service_user = hiera('neutron_service_user')
+$neutron_service_pass = hiera('neutron_service_pass')
+
 class { 'neutron::db::mysql':
 	user          => $neutron_db_user,
 	password      => $neutron_db_pass,
@@ -37,6 +40,14 @@ class { 'neutron::db::mysql':
 	collate       => 'utf8_general_ci',
 	mysql_module  => '2.3',
 	allowed_hosts => '%',
+}
+
+class { 'neutron::keystone::auth':
+	auth_name        => $neutron_service_user,
+	password         => $neutron_service_pass,
+	public_address   => $public_ip,
+	admin_address    => $mgmt_ip,
+	internal_address => $mgmt_ip,
 }
 
 class { 'neutron':
@@ -47,9 +58,6 @@ class { 'neutron':
 	rabbit_password       => $messaging_pass,
 	allow_overlapping_ips => true,
 }
-
-$neutron_service_user = hiera('neutron_service_user')
-$neutron_service_pass = hiera('neutron_service_pass')
 
 class { 'neutron::server':
 	auth_user           => $neutron_service_user,
