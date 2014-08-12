@@ -22,10 +22,22 @@ class {'::mysql::server':
 
 include profiles::identity
 
-include profiles::image
+#include profiles::image
 
 $messaging_user = hiera('rabbitmq_user')
 $messaging_pass = hiera('rabbitmq_pass')
+
+$neutron_db_user = hiera('neutron_db_user')
+$neutron_db_pass = hiera('neutron_db_pass')
+
+class { 'neutron::db::mysql':
+	user          => $neutron_db_user,
+	password      => $neutron_db_pass,
+	host          => $mgmt_ip,
+	collate       => 'utf8_general_ci',
+	mysql_module  => '2.3',
+	allowed_hosts => '%',
+}
 
 class { 'neutron':
 	verbose               => true,
@@ -39,16 +51,13 @@ class { 'neutron':
 $neutron_service_user = hiera('neutron_service_user')
 $neutron_service_pass = hiera('neutron_service_pass')
 
-$neutron_db_user = hiera('neutron_db_user')
-$neutron_db_pass = hiera('neutron_db_pass')
-
-#class { 'neutron::server':
-#auth_user           => $neutron_service_user,
-#auth_password       => $neutron_service_pass,
-#auth_host           => $mgmt_ip,
-#database_connection => "mysql://${neutron_db_user}:${neutron_db_pass}@${mgmt_ip}/neutron?charset=utf8",
-#mysql_module        => '2.3',
-#}
+class { 'neutron::server':
+	auth_user           => $neutron_service_user,
+	auth_password       => $neutron_service_pass,
+	auth_host           => $mgmt_ip,
+	database_connection => "mysql://${neutron_db_user}:${neutron_db_pass}@${mgmt_ip}/neutron?charset=utf8",
+	mysql_module        => '2.3',
+}
 
 #class { 'neutron::plugins::ml2':
 #type_drivers         => ['vlan'],

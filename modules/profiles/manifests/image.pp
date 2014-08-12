@@ -30,6 +30,7 @@ class profiles::image {
             password      => $glance_db_pass,
             user          => $glance_db_user,
             allowed_hosts => '%',
+            collate       => 'utf8_general_ci',
             mysql_module  => '2.3',
     }
 

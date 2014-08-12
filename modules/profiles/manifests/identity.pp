@@ -32,6 +32,7 @@ class profiles::identity {
 		user          => $keystone_db_user,
 		password      => $keystone_db_pass,
 		mysql_module  => '2.3',
+		collate       => 'utf8_general_ci',
 		allowed_hosts => '%',
 	}
 
