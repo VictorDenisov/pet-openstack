@@ -1,0 +1,58 @@
+{
+  "name": "duritong-sysctl",
+  "version": "0.0.4",
+  "source": "UNKNOWN",
+  "author": "duritong",
+  "license": "GPLv2",
+  "summary": "UNKNOWN",
+  "description": "This modules allows you to configure sysctl.",
+  "project_page": "https://github.com/duritong/puppet-sysctl",
+  "dependencies": [
+
+  ],
+  "types": [
+    {
+      "name": "sysctl",
+      "doc": "Manages kernel parameters in /etc/sysctl.conf.  By default this will\nonly edit the configuration file, and not change any of the runtime\nvalues.  If you wish changes to be activated right away, you can do\nso with an exec like so:\n\n        exec { load-sysctl:\n            command => \"/sbin/sysctl -p /etc/sysctl.conf\",\n            refreshonly => true\n        }\n\nSet any changes you want to happen right away to notify this command,\nor you can set it as the default:\n\n        Sysctl {\n            notify => Exec[load-sysctl]\n        }",
+      "properties": [
+        {
+          "name": "ensure",
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. "
+        },
+        {
+          "name": "val",
+          "doc": "Value the parameter should be set to\n\n"
+        },
+        {
+          "name": "target",
+          "doc": "Name of the file to store parameters in\n\n"
+        }
+      ],
+      "parameters": [
+        {
+          "name": "name",
+          "doc": "Name of the parameter\n\n"
+        }
+      ],
+      "providers": [
+        {
+          "name": "parsed",
+          "doc": ""
+        }
+      ]
+    }
+  ],
+  "checksums": {
+    "Gemfile": "309cfb97d73b75547b5f1fd9036820cb",
+    "Modulefile": "aac5a0891ee4dc8bac11528977dfe3c5",
+    "README.md": "e0841427b8be6406a3a14cdcfc250f15",
+    "Rakefile": "f39450f89f23380c06f6d6a36d0ec017",
+    "lib/puppet/provider/sysctl/parsed.rb": "f1ad6c1cd610b6fe33fcd245759c09d1",
+    "lib/puppet/type/sysctl.rb": "d6ec1e76ef718ce110dfa43140435a32",
+    "manifests/params.pp": "128bdc663412af7266a1ae53b1429902",
+    "manifests/value.pp": "c1f1a4fbeb19678eeafbef5797fd5ae6",
+    "spec/defines/value_spec.rb": "1de182bcdb1f557f983080806502868b",
+    "spec/fixtures/manifests/site.pp": "d41d8cd98f00b204e9800998ecf8427e",
+    "spec/spec_helper.rb": "792eeb7aa7edafb93e2bc1d27c5e75c5"
+  }
+}

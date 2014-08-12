@@ -1,16 +1,3 @@
-augeas { "sshd_config":
-	changes => [ "set /files/etc/ssh/sshd_config/PermitRootLogin yes",
-	],
-}
-
-package { 'openvswitch-switch':
-	ensure => present,
-}
-
-vs_bridge { 'br-ex':
-	ensure => present,
-}
-
 exec { '/usr/bin/apt-get update': }
 
 include ntp
@@ -110,3 +97,42 @@ class { 'glance::keystone::auth':
 	admin_address    => $mgmt_ip,
 	internal_address => $mgmt_ip,
 }
+
+$messaging_user = hiera('rabbitmq_user')
+$messaging_pass = hiera('rabbitmq_pass')
+
+class { 'neutron':
+	verbose               => true,
+	bind_host             => $mgmt_ip,
+	rabbit_host           => $mgmt_ip,
+	rabbit_user           => $messaging_user,
+	rabbit_password       => $messaging_pass,
+	allow_overlapping_ips => true,
+}
+
+$neutron_service_user = hiera('neutron_service_user')
+$neutron_service_pass = hiera('neutron_service_pass')
+
+$neutron_db_user = hiera('neutron_db_user')
+$neutron_db_pass = hiera('neutron_db_pass')
+
+#class { 'neutron::server':
+#auth_user           => $neutron_service_user,
+#auth_password       => $neutron_service_pass,
+#auth_host           => $mgmt_ip,
+#database_connection => "mysql://${neutron_db_user}:${neutron_db_pass}@${mgmt_ip}/neutron?charset=utf8",
+#mysql_module        => '2.3',
+#}
+
+#class { 'neutron::plugins::ml2':
+#type_drivers         => ['vlan'],
+#tenant_network_types => ['vlan'],
+#}
+
+#class { 'neutron::agents::dhcp': }
+#class { 'neutron::agents::l3': }
+
+#class { 'neutron::agents::metadata':
+#auth_user     => $neutron_service_user,
+#auth_password => $neutron_service_pass,
+#}
