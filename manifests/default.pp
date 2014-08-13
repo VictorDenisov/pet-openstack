@@ -95,6 +95,18 @@ vs_port { 'eth2':
 	bridge => 'br-ex',
 }
 
+augeas { "routing":
+	changes => [ "set /files/etc/sysctl.conf/net.ipv4.ip_forward 1",
+		     "set /files/etc/sysctl.conf/net.ipv4.conf.all.rp_filter 0",
+		     "set /files/etc/sysctl.conf/net.ipv4.conf.default.rp_filter 0",
+	],
+	notify => Exec['sysctl'],
+}
+
+exec { 'sysctl':
+	command => '/sbin/sysctl -p',
+}
+
 #class { 'neutron::agents::metadata':
 #auth_user     => $neutron_service_user,
 #auth_password => $neutron_service_pass,
