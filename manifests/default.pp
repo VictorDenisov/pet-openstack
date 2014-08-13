@@ -1,7 +1,7 @@
 exec { '/usr/bin/apt-get update': }
 
 include ntp
-#include messaging
+include messaging
 
 $db_root_pass = hiera('mysql_root_pass')
 
@@ -52,7 +52,6 @@ class { 'neutron::keystone::auth':
 
 class { 'neutron':
 	verbose               => true,
-	bind_host             => $mgmt_ip,
 	rabbit_host           => $mgmt_ip,
 	rabbit_user           => $messaging_user,
 	rabbit_password       => $messaging_pass,
@@ -63,6 +62,7 @@ class { 'neutron::server':
 	auth_user           => $neutron_service_user,
 	auth_password       => $neutron_service_pass,
 	auth_host           => $mgmt_ip,
+	auth_port           => 5000,
 	database_connection => "mysql://${neutron_db_user}:${neutron_db_pass}@${mgmt_ip}/neutron?charset=utf8",
 	mysql_module        => '2.3',
 }

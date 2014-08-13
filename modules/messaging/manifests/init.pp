@@ -10,4 +10,11 @@ class messaging {
 		admin    => true,
 		password => $messaging_pass,
 	}
+
+    rabbitmq_user_permissions { "$messaging_user@/":
+      configure_permission => '.*',
+      read_permission      => '.*',
+      write_permission     => '.*',
+    }
+
 }
