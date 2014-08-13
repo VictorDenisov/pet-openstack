@@ -67,13 +67,33 @@ class { 'neutron::server':
 	mysql_module        => '2.3',
 }
 
-#class { 'neutron::plugins::ml2':
-#type_drivers         => ['vlan'],
-#tenant_network_types => ['vlan'],
-#}
+class { 'neutron::plugins::ml2':
+	type_drivers         => ['vlan'],
+	tenant_network_types => ['vlan'],
+	mechanism_drivers     => ['openvswitch'],
+}
 
-#class { 'neutron::agents::dhcp': }
-#class { 'neutron::agents::l3': }
+class { 'neutron::agents::ml2::ovs':
+	bridge_mappings => ['private:br-eth3'],
+}
+
+class { 'neutron::agents::l3': }
+
+class { 'neutron::agents::dhcp': }
+
+vs_port { 'eth3':
+	ensure => present,
+	bridge => 'br-eth3',
+}
+
+vs_bridge { 'br-ex':
+	ensure => present,
+}
+
+vs_port { 'eth2':
+	ensure => present,
+	bridge => 'br-ex',
+}
 
 #class { 'neutron::agents::metadata':
 #auth_user     => $neutron_service_user,
