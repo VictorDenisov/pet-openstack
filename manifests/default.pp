@@ -93,6 +93,7 @@ vs_bridge { 'br-ex':
 vs_port { 'eth2':
 	ensure => present,
 	bridge => 'br-ex',
+	notify => Exec['set-br-ex'],
 }
 
 augeas { "routing":
@@ -107,6 +108,40 @@ exec { 'sysctl':
 	command => '/sbin/sysctl -p',
 }
 
+
+augeas { 'external-ip':
+	context => '/files/etc/network/interfaces',
+	changes => [
+		"set iface[. = \'eth2\']/method manual",
+		"insert up after iface[. = \'eth2\']/method",
+		"insert down after iface[. = \'eth2\']/up",
+		"set iface[. = \'eth2\']/up \'ip l s \$IFACE up\'",
+		"set iface[. = \'eth2\']/down \'ip l s \$IFACE down\'",
+		"rm iface[. = \'eth2\']/address",
+		"rm iface[. = \'eth2\']/netmask",
+
+		"insert auto after iface[last()]",
+		"insert 1 after auto[last()]",
+		"mv 1 auto[last()]/1",
+		"set auto[last()]/1 br-ex",
+		"insert iface after auto[last()]",
+		"set iface[last()] br-ex",
+		"set iface[. = \'br-ex\']/family inet",
+		"set iface[. = \'br-ex\']/method static",
+		"set iface[. = \'br-ex\']/address $public_ip",
+                "set iface[. = \'br-ex\']/netmask 255.255.255.0",
+		],
+	notify => Exec['clear-eth'],
+}
+
+exec { 'clear-eth':
+	command => '/sbin/ifconfig eth2 0.0.0.0 up',
+	notify => Exec['set-br-ex'],
+}
+
+exec { 'set-br-ex':
+	command => "/sbin/ifconfig br-ex $public_ip up",
+}
 #class { 'neutron::agents::metadata':
 #auth_user     => $neutron_service_user,
 #auth_password => $neutron_service_pass,
