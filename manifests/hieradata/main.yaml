@@ -39,3 +39,5 @@ ceilometer_db_pass: "ceilPass"
 
 ceilometer_service_user: "ceilometer"
 ceilometer_service_pass: "ceilometer"
+
+metadata_shared_secret: "very_secret_shared_secret"
