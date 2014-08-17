@@ -1,0 +1,17 @@
+{
+  "Gemfile": "6992d521994d948eb6e48acd733a07bf",
+  "LICENSE": "d42ad7f00d233260ac2fba922b7fd83c",
+  "README-DEVELOPER": "d45048731ddb158a56a1b26293fb5dbf",
+  "README.md": "5e413ce743931ae9198cf8cfbd41b653",
+  "Rakefile": "8ff6a0f7db638421d1742c5d365d0266",
+  "lib/puppet/parser/functions/memcached_max_memory.rb": "edc87a9d229013298027a075e3eb8795",
+  "manifests/init.pp": "7b3869d18b7933b1c53420fab6514a9e",
+  "manifests/params.pp": "fc71986251dd19ff5806a89f2297d7fd",
+  "metadata.json": "d1178c1db0e9ed710028838d793735eb",
+  "spec/classes/memcached_spec.rb": "0b1a010763461cb33e1e468f531a4859",
+  "spec/spec.opts": "a600ded995d948e393fbe2320ba8e51c",
+  "spec/spec_helper.rb": "3ea886dd135e120afa31e0aab12e85b0",
+  "templates/memcached.conf.erb": "825467c9581dcdfdad8cc2816d78cb1a",
+  "templates/memcached_sysconfig.erb": "f3a3d1ab1c50d95b2b8138d82961c3b4",
+  "tests/init.pp": "e798f4999ba392f3c0fce0d5290c263f"
+}
