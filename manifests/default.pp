@@ -25,3 +25,5 @@ include profiles::identity
 include profiles::image
 
 include profiles::networking
+
+include profiles::compute

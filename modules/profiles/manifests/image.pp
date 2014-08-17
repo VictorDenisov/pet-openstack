@@ -35,6 +35,7 @@ class profiles::image {
     }
 
     class { 'glance::keystone::auth':
+	    auth_name        => $glance_service_user,
             password         => $glance_service_pass,
             email            => 'glance@example.com',
             public_address   => $public_ip,
