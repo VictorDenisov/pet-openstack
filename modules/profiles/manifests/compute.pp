@@ -40,6 +40,7 @@ class profiles::compute {
 		rabbit_userid       => $messaging_user,
 		rabbit_password     => $messaging_pass,
 		mysql_module        => '2.3',
+		notify              => Exec['readable_kernel'],
 	}
 
 	class { 'nova::compute':
@@ -83,5 +84,17 @@ class profiles::compute {
 		auth_host                            => $mgmt_ip,
 		auth_port                            => 5000,
 		neutron_metadata_proxy_shared_secret => $metadata_shared_secret,
+	}
+
+	exec { 'readable_kernel':
+		command => '/usr/bin/dpkg-statoverride --update --add root root 0644 /boot/vmlinuz-3.13.0-*',
+		before  => File['statoverride'],
+	}
+
+	file { 'statoverride':
+		path   => '/etc/kernel/postinst.d/statoverride',
+		ensure => present,
+		mode   => 0755,
+		source => 'puppet:///modules/profiles/statoverride',
 	}
 }

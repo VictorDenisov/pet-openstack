@@ -33,6 +33,7 @@ class profiles::networking {
 		rabbit_user           => $messaging_user,
 		rabbit_password       => $messaging_pass,
 		allow_overlapping_ips => true,
+		service_plugins       => ['router'],
 	}
 
 	class { 'neutron::server':
@@ -45,13 +46,15 @@ class profiles::networking {
 	}
 
 	class { 'neutron::plugins::ml2':
-		type_drivers         => ['vlan'],
+		type_drivers         => ['flat', 'vlan'],
 		tenant_network_types => ['vlan'],
-		mechanism_drivers     => ['openvswitch'],
+		mechanism_drivers    => ['openvswitch'],
+		flat_networks        => ['external'],
+		network_vlan_ranges  => ['private'],
 	}
 
 	class { 'neutron::agents::ml2::ovs':
-		bridge_mappings => ['private:br-eth3'],
+		bridge_mappings => ['private:br-eth3', 'external:br-ex'],
 	}
 
 	class { 'neutron::agents::l3': }
@@ -61,10 +64,6 @@ class profiles::networking {
 	vs_port { 'eth3':
 		ensure => present,
 		bridge => 'br-eth3',
-	}
-
-	vs_bridge { 'br-ex':
-		ensure => present,
 	}
 
 	vs_port { 'eth2':
