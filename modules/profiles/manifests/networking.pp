@@ -34,6 +34,7 @@ class profiles::networking {
 		rabbit_password       => $messaging_pass,
 		allow_overlapping_ips => true,
 		service_plugins       => ['router'],
+		core_plugin           => 'ml2',
 	}
 
 	class { 'neutron::server':
@@ -50,7 +51,7 @@ class profiles::networking {
 		tenant_network_types => ['vlan'],
 		mechanism_drivers    => ['openvswitch'],
 		flat_networks        => ['external'],
-		network_vlan_ranges  => ['private'],
+		network_vlan_ranges  => ['private:1000:2999'],
 	}
 
 	class { 'neutron::agents::ml2::ovs':
