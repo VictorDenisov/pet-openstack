@@ -67,7 +67,8 @@ class profiles::compute {
 	}
 
 	class { 'nova::compute::libvirt':
-		vncserver_listen => $mgmt_ip,
+		vncserver_listen  => $mgmt_ip,
+		libvirt_virt_type => 'qemu',
 	}
 
 	class { 'nova::network::neutron':
@@ -75,6 +76,8 @@ class profiles::compute {
 		neutron_admin_password => $neutron_service_pass,
 		neutron_url            => "http://$mgmt_ip:9696",
 		neutron_admin_auth_url => "http://$mgmt_ip:5000/v2.0",
+		vif_plugging_is_fatal  => false,
+		vif_plugging_timeout   => '10',
 	}
 
 	class { 'nova::api':
