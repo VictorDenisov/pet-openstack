@@ -27,3 +27,5 @@ include profiles::image
 include profiles::networking
 
 include profiles::compute
+
+include profiles::dashboard
