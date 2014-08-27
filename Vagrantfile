@@ -19,7 +19,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
 	config.vm.provider :virtualbox do |vb|
 		vb.customize ["modifyvm", :id, "--cpus", "2"]
-		vb.customize ["modifyvm", :id, "--memory", "2048"]
+		vb.customize ["modifyvm", :id, "--memory", "4096"]
+		vb.customize ["modifyvm", :id, "--nicpromisc2", "allow-all"]
+		vb.customize ["modifyvm", :id, "--nicpromisc3", "allow-all"]
+		vb.customize ["modifyvm", :id, "--nicpromisc4", "allow-all"]
 	end
 
 	config.vm.provision "puppet" do |puppet|
