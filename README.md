@@ -26,3 +26,15 @@ After you installed vagrant you can type:
 $ vagrant up
 
 and your openstack node should be ready in about half of an hour.
+
+Network Folder
+--------------
+
+By default Pet Openstack mounts your project directory to /vagrant on your vm
+with Pet Openstack.  It requires package nfsd. However this feature is not
+vital to your Pet Openstack. You can delete this line
+
+> config.vm.synced_folder ".", "/vagrant", nfs: true
+
+from Vagrant file if you have issues configuring nfs folder. Then you will need
+to upload cirros image from your host machine to the vm with Pet Openstack.
