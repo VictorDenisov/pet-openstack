@@ -27,6 +27,12 @@ $ vagrant up
 
 and your openstack node should be ready in about half of an hour.
 
+Cinder
+------
+
+If you don't need cinder then before running vagrant just remove include
+profiles::block from manifests/default.pp.
+
 Network Folder
 --------------
 

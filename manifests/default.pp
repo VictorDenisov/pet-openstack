@@ -29,3 +29,5 @@ include profiles::networking
 include profiles::compute
 
 include profiles::dashboard
+
+include profiles::block

@@ -34,8 +34,8 @@ class profiles::compute {
 	}
 
 	class { 'nova':
-		database_connection => "mysql://$nova_db_user:$nova_db_pass@$mgmt_ip/nova?charset=utf8",
-		glance_api_servers  => "$mgmt_ip:9292",
+		database_connection => "mysql://${nova_db_user}:${nova_db_pass}@${mgmt_ip}/nova?charset=utf8",
+		glance_api_servers  => "${mgmt_ip}:9292",
 		rabbit_host         => $mgmt_ip,
 		rabbit_userid       => $messaging_user,
 		rabbit_password     => $messaging_pass,
@@ -74,8 +74,8 @@ class profiles::compute {
 	class { 'nova::network::neutron':
 		neutron_admin_username => $neutron_service_user,
 		neutron_admin_password => $neutron_service_pass,
-		neutron_url            => "http://$mgmt_ip:9696",
-		neutron_admin_auth_url => "http://$mgmt_ip:5000/v2.0",
+		neutron_url            => "http://${mgmt_ip}:9696",
+		neutron_admin_auth_url => "http://${mgmt_ip}:5000/v2.0",
 		vif_plugging_is_fatal  => false,
 		vif_plugging_timeout   => '10',
 	}
