@@ -1,4 +1,4 @@
-Pet Openstack
+Pet Openstack 1.1
 =============
 
 Pet Openstack is a one node deployment of openstack designed for use under
