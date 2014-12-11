@@ -11,37 +11,9 @@ describe 'rabbitmq' do
   end
 
   context 'on Debian' do
-    let(:facts) {{ :osfamily => 'Debian', :lsbdistid => 'Debian', :lsbdistcodename => 'squeeze' }}
+    let(:facts) {{ :osfamily => 'Debian', :lsbdistcodename => 'squeeze' }}
     it 'includes rabbitmq::repo::apt' do
       should contain_class('rabbitmq::repo::apt')
-    end
-
-    describe 'apt::source default values' do
-      let(:facts) {{ :osfamily => 'Debian' }}
-      it 'should add a repo with defaults values' do
-        contain_file('/etc/apt/sources.list.d/rabbitmq.list')\
-          .with_content(/deb http\:\/\/www\.rabbitmq.com\/debian\/ testing main/)
-      end
-    end
-
-    describe 'apt::source custom values' do
-      let(:params) {
-        { :location => 'http://www.foorepo.com/debian',
-          :release => 'unstable',
-          :repos => 'main'
-        }}
-      it 'should add a repo with custom new values' do
-        contain_file('/etc/apt/sources.list.d/rabbitmq.list')\
-          .with_content(/deb http\:\/\/www\.foorepo.com\/debian\/ unstable main/)
-      end
-    end
-  end
-
-  context 'on Debian' do
-    let(:params) {{ :manage_repos => false }}
-    let(:facts) {{ :osfamily => 'Debian', :lsbdistid => 'Debian', :lsbdistcodename => 'squeeze' }}
-    it 'does not include rabbitmq::repo::apt when manage_repos is false' do
-      should_not contain_class('rabbitmq::repo::apt')
     end
   end
 
@@ -51,22 +23,13 @@ describe 'rabbitmq' do
       should contain_class('rabbitmq::repo::rhel')
     end
   end
-
-  context 'on Redhat' do
-    let(:params) {{ :manage_repos => false }}
-    let(:facts) {{ :osfamily => 'RedHat' }}
-    it 'does not include rabbitmq::repo::rhel when manage_repos is false' do
-      should_not contain_class('rabbitmq::repo::rhel')
-    end
-  end
-
+  
   ['Debian', 'RedHat', 'SUSE', 'Archlinux'].each do |distro|
     context "on #{distro}" do
       let(:facts) {{
         :osfamily => distro,
         :rabbitmq_erlang_cookie => 'EOKOWXQREETZSHFNTPEY',
-        :lsbdistcodename => 'squeeze',
-        :lsbdistid => 'Debian'
+        :lsbdistcodename => 'squeeze'
       }}
 
       it { should contain_class('rabbitmq::install') }
@@ -94,6 +57,21 @@ describe 'rabbitmq' do
         end
       end
 
+      context 'with erlang_manage set to true' do
+        let(:params) {{ :erlang_manage => true }}
+        it 'includes erlang' do
+          should contain_class('erlang')
+        end
+      end
+
+      context 'with erlang_manage set to false' do
+        let(:params) {{ :erlang_manage => false }}
+        it 'doesnt include erlang' do
+          should_not contain_class('erlang')
+        end
+      end
+
+
       context 'deprecated parameters' do
         describe 'cluster_disk_nodes' do
           let(:params) {{ :cluster_disk_nodes => ['node1', 'node2'] }}
@@ -113,7 +91,7 @@ describe 'rabbitmq' do
       end
 
       context 'configures config_cluster' do
-        let(:facts) {{ :osfamily => distro, :rabbitmq_erlang_cookie => 'ORIGINAL', :lsbdistid => 'Debian' }}
+        let(:facts) {{ :osfamily => distro, :rabbitmq_erlang_cookie => 'ORIGINAL' }}
         let(:params) {{
           :config_cluster           => true,
           :cluster_nodes            => ['hare-1', 'hare-2'],
@@ -251,30 +229,6 @@ describe 'rabbitmq' do
         end
       end
 
-      describe 'configuring ldap authentication' do
-        let :params do
-          { :config_stomp         => true,
-            :ldap_auth            => true,
-            :ldap_server          => 'ldap.example.com',
-            :ldap_user_dn_pattern => 'ou=users,dc=example,dc=com',
-            :ldap_use_ssl         => false,
-            :ldap_port            => '389',
-            :ldap_log             => true
-          }
-        end
-
-        it { should contain_rabbitmq_plugin('rabbitmq_auth_backend_ldap') }
-
-        it 'should contain ldap parameters' do
-          verify_contents(subject, 'rabbitmq.config', 
-                          ['[', '  {rabbit, [', '    {auth_backends, [rabbit_auth_backend_internal, rabbit_auth_backend_ldap]},', '  ]}',
-                            '  {rabbitmq_auth_backend_ldap, [', '    {other_bind, anon},',
-                            '    {servers, ["ldap.example.com"]},',
-                            '    {user_dn_pattern, "ou=users,dc=example,dc=com"},', '    {use_ssl, false},',
-                            '    {port, 389},', '    {log, true}'])
-        end
-      end
-
       describe 'default_user and default_pass set' do
         let(:params) {{ :default_user => 'foo', :default_pass => 'bar' }}
         it 'should set default_user and default_pass to specified values' do
@@ -318,18 +272,6 @@ describe 'rabbitmq' do
             .with_content(/\{frame_max, 131072\}/) \
             .with_content(/\{collect_statistics, none\}/) \
             .with_content(/\{auth_mechanisms, \['PLAIN', 'AMQPLAIN'\]\}/)
-        end
-      end
-
-      describe 'config_kernel_variables options' do
-        let(:params) {{ :config_kernel_variables => {
-            'inet_dist_listen_min'      => 9100,
-            'inet_dist_listen_max'      => 9105,
-        }}}
-        it 'should set config variables' do
-          should contain_file('rabbitmq.config') \
-            .with_content(/\{inet_dist_listen_min, 9100\}/) \
-            .with_content(/\{inet_dist_listen_max, 9105\}/) 
         end
       end
 
@@ -385,7 +327,7 @@ describe 'rabbitmq' do
         end
       end
 
-      describe 'service with service_manage equal to false' do
+      describe 'service with manage_service equal to false' do
         let :params do
           { :service_manage => false }
         end
@@ -406,14 +348,14 @@ describe 'rabbitmq' do
       should contain_package('rabbitmq-server').with(
         'ensure'   => 'installed',
         'name'     => 'rabbitmq-server',
-        'provider' => 'yum',
+        'provider' => 'rpm',
         'source'   => 'http://www.rabbitmq.com/releases/rabbitmq-server/v3.2.3/rabbitmq-server-3.2.3-1.noarch.rpm'
       )
     end
   end
 
   context "on Debian" do
-    let(:facts) {{ :osfamily => 'Debian', :lsbdistid => 'Debian', :lsbdistcodename => 'precise' }}
+    let(:facts) {{ :osfamily => 'Debian', :lsbdistcodename => 'precise' }}
     it 'installs the rabbitmq package' do
       should contain_package('rabbitmq-server').with(
         'ensure'   => 'installed',
@@ -422,7 +364,7 @@ describe 'rabbitmq' do
       )
     end
   end
-
+  
   context "on Archlinux" do
     let(:facts) {{ :osfamily => 'Archlinux' }}
     it 'installs the rabbitmq package' do
@@ -433,7 +375,7 @@ describe 'rabbitmq' do
   end
 
   describe 'repo management on Debian' do
-    let(:facts)  {{ :osfamily => 'Debian', :lsbdistid => 'Debian' }}
+    let(:facts)  {{ :osfamily => 'Debian' }}
 
     context 'with no pin' do
       let(:params) {{ :package_apt_pin => '' }}

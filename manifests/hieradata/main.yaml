@@ -41,3 +41,6 @@ ceilometer_service_user: "ceilometer"
 ceilometer_service_pass: "ceilometer"
 
 metadata_shared_secret: "very_secret_shared_secret"
+
+apt::update_timeout: 60
+apt::update_tries: 10
